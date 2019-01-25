@@ -12,7 +12,8 @@
     <v-toolbar app>Vue.js PWA</v-toolbar>
     <v-content>
       <v-container fluid>
-        <router-view></router-view>
+        <potreb></potreb>
+        <!-- <router-view></router-view> -->
       </v-container>
     </v-content>
     <v-footer app>EvgenJin</v-footer>
@@ -22,11 +23,13 @@
 
 <script>
 import Hello from './components/Hello'
+import Potreb from './components/Potreb'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Hello,
+    Potreb
   }
 }
 </script>
