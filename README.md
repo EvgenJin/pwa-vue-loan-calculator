@@ -1,1 +1,1 @@
-# vue_pwa
+# vue_pwa calculator app
