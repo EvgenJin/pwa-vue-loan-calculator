@@ -1,12 +1,29 @@
 <template>
   <v-container fluid grid-list-md>
+<v-layout row wrap>
+  <v-flex xs12 sm6 md4>
+    <v-select 
+      v-model="num_pr" 
+      :items="products" 
+      item-text="product" 
+      item-value="code"
+      label="Направление"
+    />
+  </v-flex>
+  <v-flex xs12 sm6 md4>
+    <v-select 
+      v-model="product" 
+      :items="get_products" 
+      item-text="product" 
+      item-value="code"
+      label="Программа"
+    />
+  </v-flex>
+</v-layout>
     <v-layout row wrap>
-      <v-flex xs9>
-        <v-text-field
-        label="ФИО"
-        />
-      </v-flex>
-      <v-flex xs3>
+      <!-- **************фио категория***********************-->
+      <v-flex xs12 sm6 md4><v-text-field label="ФИО"/></v-flex>
+      <v-flex xs12 sm6 md2>
         <v-select
           v-model="category"
           :items="items"
@@ -15,45 +32,33 @@
           label="Категория клиента"
         />
       </v-flex>
+    </v-layout>
+    <v-layout row wrap>
       <!-- **************доходы расходы ***********************-->
-      <v-flex xs6>
+      <v-flex xs6 md2>
         <v-subheader class="pl-0">Доходы</v-subheader>
         <v-text-field v-model="income" type="number"/>
       </v-flex>
-      <v-flex xs6>
+      <v-flex xs6 md2>
         <v-subheader class="pl-0">Обязательства</v-subheader>
         <v-text-field v-model="outcome" type="number"/>
       </v-flex>
+    </v-layout>
+    <v-layout row wrap>
       <!-- **************дисконты***********************-->      
-      <v-flex xs12>
-        <v-layout row wrap>
-        <!-- ${switch1.toString()} -->
-        <v-flex xs12 sm4 md4 lg2>
-        <v-switch
-          :label="`ЗП проект`"
-          v-model="switch_disc"
-        />
+        <v-flex xs12 sm4 md2>
+          <v-switch :label="`ЗП проект`" v-model="switch_disc"/>
         </v-flex>
-
-        <v-flex xs12 sm4 md4 lg2>
-        <v-switch
-          :label="`КДС`"
-          v-model="switch_insr"
-        />
+        <v-flex xs12 sm4 md2>
+          <v-switch :label="`КДС`" v-model="switch_insr"/>
         </v-flex>
-
-        <v-flex xs12 sm4 md4 lg2>
-        <v-switch
-          :label="`Обеспечение`"
-          v-model="switch_obesp"
-        />
+        <v-flex xs12 sm4 md2>
+          <v-switch :label="`Обеспечение`" v-model="switch_obesp"/>
         </v-flex>
-
-        </v-layout>
-      </v-flex>
-     <!-- Срок сумма ставка -->
-     </v-flex>
-      <v-flex xs6>
+    </v-layout>
+    <v-layout row wrap>     
+        <!-- **************Срок сумма ставка***********************-->   
+      <v-flex xs12 md3>
         <v-subheader class="pl-0">Срок</v-subheader>
         <v-slider
           v-model="srok"
@@ -62,164 +67,133 @@
         />
       </v-flex>
       <!--  -->
-      <v-flex xs3>        
+      <v-flex xs6 md1>
         <v-subheader class="pl-0">Сумма</v-subheader>
         <v-text-field
-          v-model="summa"          
+          v-model.number="summa"          
           type="number"
         />
       </v-flex>
       <!--  -->
-      <v-flex xs3>
+      <v-flex xs6 md1>
         <v-subheader class="pl-0">Ставка</v-subheader>
         <v-text-field
           v-model="std_rate"
         />
-     </v-flex>       
-      <!-- итоги -->
-      <v-flex xs12>
+     </v-flex>
+    </v-layout>
+     
+      <!-- **************Итоги***********************-->
+    <v-flex xs12>
         <h3>Платеж: {{pmt(std_rate).toLocaleString()}} Руб</h3>
         <h3>Проценты: {{ profit.toLocaleString()}} Руб</h3>
-      <v-btn fab dark color="indigo" @click = "add_var">
-        <v-icon dark>add</v-icon>
-      </v-btn>        
+    <v-btn color="info" @click = "add_var">Добавить</v-btn>
       </v-flex>
       <!-- таблица с вариантами -->
-      <v-data-table
-        :headers="headers"
-        :items="vars"
-        hide-actions
-        class="elevation-1"
-      >
+      <v-layout row wrap>
+      <v-flex xs12 md7>
+      <v-data-table :headers="headers" :items="vars" hide-actions>
         <template slot="items" slot-scope="props">
           <td>{{ props.item.summa.toLocaleString() }}</td>
-          <td class="text-xs-right">{{ props.item.srok }}</td>
-          <td class="text-xs-right">{{ props.item.rate }}</td>
-          <td class="text-xs-right">{{ props.item.pmt.toLocaleString() }}</td>
-          <td class="text-xs-right">{{ props.item.proc.toLocaleString() }}</td>
-          <td class="text-xs-right">{{ props.item.kds }}</td>
-          <td class="text-xs-right">{{ props.item.obesp }}</td>
+          <td class="text-xs-center">{{ props.item.srok }}</td>
+          <td class="text-xs-center">{{ props.item.rate }}</td>
+          <td class="text-xs-center">{{ props.item.pmt.toLocaleString() }}</td>
+          <td class="text-xs-center">{{ props.item.proc.toLocaleString() }}</td>
+          <td class="text-xs-center">{{ props.item.kds }}</td>
+          <td class="text-xs-center">{{ props.item.obesp }}</td>
         </template>
-      </v-data-table>      
-    <v-flex>
-    </v-flex>   
-
+      </v-data-table>
+      </v-flex>
+      </v-layout>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import * as func from './functions.js';
+import * as dec from './decision.js';
+import * as dic from './dictionary.js';
 export default {
   name: 'Potreb',
   data () {
     return {
-      category: 0,
-        items: [
-          { cat_name: 'Группа Газпром', cat_id: 3 },
-          { cat_name: 'Приоритет', cat_id: 82 },
-          { cat_name: 'Розница', cat_id: 2 },
-          { cat_name: 'Прочие ФЛ', cat_id: 0},
-        ],
-      income:40000,
-      outcome:5000,
-      srok: 36,
+      items: dic.category,
+      // значения по-уморчанию
+      category: 0, //категория клиента по умолчанию
+      income:0,
+      outcome:0,
+      srok: 1,
       summa: 50000,
-      switch_insr: true,
-      switch_disc: true,     
+      switch_insr: false,
+      switch_disc: false,
       switch_obesp: false,
+      // блок предложений
       vars: [],
       rowsPerPageItems: [16, 24, 32],
       pagination: {
         rowsPerPage: 16
       },
       headers: [
-        { text: 'Сумма',align: 'left',value: 'summa'},
-        { text: 'Срок, мес', value: 'srok' },
-        { text: 'Ставка', value: 'fat' },
-        { text: 'Платеж, руб', value: 'carbs' },
-        { text: 'Проценты', value: 'protein' },
-        { text: 'КДС', value: 'iron' },
-        { text: 'Обеспечение', value: 'iron' }
+        { text: 'Сумма', value: 'summa', align: 'left'},
+        { text: 'Срок, мес', value: 'srok',align: 'center'},
+        { text: 'Ставка', value: 'rate',align: 'center'},
+        { text: 'Платеж, руб', value: 'pmt',align: 'center'},
+        { text: 'Проценты', value: 'proc',align: 'center'},
+        { text: 'КДС', value: 'kds',align: 'center'},
+        { text: 'Обеспечение', value: 'obesp',align: 'center'}
       ],
+      // продукты
+      products:dic.products,
+      num_pr:'1',
+      product:''   
     }
   },
     methods: {
-    get_rate (cat_id,srok,obesp) {
-        let result = 0
-    if (obesp == false) {
-        // по всем срок до 1 года у всех 9.99
-      if (srok <= 12) {result = 9.99}
-        // газпром
-        else if (cat_id == 3 && (srok > 12 && srok <= 60)) {result = 11.4}
-        else if (cat_id == 3 && (srok > 60 && srok <= 84)) {result = 14.25}
-        // приоритет
-        else if (cat_id == 82 && (srok > 12 && srok <= 60)) {result = 11.4}
-        else if (cat_id == 82 && (srok > 60 && srok <= 84)) {result = 14.25}
-        //  розница
-        else if (cat_id == 2 && (srok > 12 && srok <= 60)) {result = 11.9}
-        else if (cat_id == 2 && (srok > 60 && srok <= 84)) {result = 14.25}
-        // прочие
-        else if (cat_id == 0 && (srok > 12 && srok <= 60)) {result = 12.4}
-    }
-    else if (obesp == true) {
-      // по всем срок до 1 года у всех 9.99
-      if (srok <= 24) {result = 11.4}
-        // по всем до 2 лет 11.4
-        else if (srok > 24 && srok <= 60) {result = 11.4}
-        // по всем от 5 до 7 лет 13.75
-        else if (cat_id !== 0 && srok > 60 && srok <= 84) {result = 13.75}
-    }
-        return result
-    },
-    calc_pmt (rate,summa,srok) {     
-      rate = rate / 1200
-      srok = srok
-      let pow = Math.pow((1+rate),-srok)
-      let res = Math.round(summa * rate / (1-pow))
-        if (this.switch_insr) {res = res+summa*0.00192}
-          return res
-    },
-    decode_boolean (vars) {
-      let res
-      if (vars == true) {res = 'Да'}
-      else {res = 'Нет'}
-      return res
-    },
-    add_var () {
-      this.vars.push({
-            rate:this.std_rate
-           ,pmt:this.calc_pmt(this.std_rate,this.summa,this.srok)
-           ,kds: this.decode_boolean(this.switch_insr)
-           ,obesp: this.decode_boolean(this.switch_obesp)
-           ,proc:this.profit
-           ,srok:this.srok
-           ,summa:this.summa
-      })      
-    },        
+    // добавить в предложение
+      add_var () {
+        this.vars.push({
+             rate:this.std_rate
+            ,pmt:func.calc_pmt(this.std_rate,this.summa,this.srok)
+            ,kds: func.decode_boolean(this.switch_insr)
+            ,obesp: func.decode_boolean(this.switch_obesp)
+            ,proc:this.profit
+            ,srok:this.srok
+            ,summa:this.summa
+        })  
+      }
     },
     // -------------Показы----------------
     computed: {
-      // показ ставки
+      // продукты из выбранного направления
+      get_products () {
+        let res = this.products.find((el) =>
+          el.code == this.num_pr
+        )
+        return res.options
+      },
       std_rate: function () {
-      let sum_disc = 0
-      if (!this.switch_insr) {sum_disc = sum_disc + 3}
-      if (!this.switch_disc) {sum_disc = sum_disc + 1}           
-        return this.get_rate(this.category,this.srok,this.switch_obesp) + sum_disc
-        
+        let req =  {
+          cat_id: this.category,
+          term: this.srok,
+          amount: this.summa,
+          obesp: this.switch_obesp,
+          insr: this.switch_insr,
+          zp: this.switch_disc,
+          num_pr: this.num_pr,
+          product: this.product
+        }
+        return dec.get_rate(req)
       },
       // показ платежа
       pmt: function () {
-          return (rate) => this.calc_pmt(rate,this.summa,this.srok)
+          return (rate) => func.calc_pmt(rate,this.summa,this.srok)
       },
       // показ всех процентов
       profit: function () {
         return this.pmt(this.std_rate)*this.srok-this.summa
-      },      
+      },  
     },
-
-    created () {
-        
-    }
+    created() {}
 }
 </script>
 
