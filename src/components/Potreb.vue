@@ -1,27 +1,28 @@
 <template>
   <v-container fluid grid-list-md>
-<v-layout row wrap>
-  <v-flex xs12 sm6 md4>
-    <v-select 
-      v-model="num_pr" 
-      :items="products" 
-      item-text="product" 
-      item-value="code"
-      label="Направление"
-    />
-  </v-flex>
-  <v-flex xs12 sm6 md4>
-    <v-select 
-      v-model="product" 
-      :items="get_products" 
-      item-text="product" 
-      item-value="code"
-      label="Программа"
-    />
-  </v-flex>
-</v-layout>
     <v-layout row wrap>
-      <!-- **************фио категория***********************-->
+      <!-- ************** направление программа ***********************-->
+      <v-flex xs12 sm6 md4>
+        <v-select 
+          v-model="num_pr" 
+          :items="products" 
+          item-text="product" 
+          item-value="code"
+          label="Направление"
+        />
+      </v-flex>
+      <v-flex xs12 sm6 md4>
+        <v-select 
+          v-model="product" 
+          :items="get_products" 
+          item-text="product" 
+          item-value="code"
+          label="Программа"
+        />
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap>
+      <!-- ************** фио категория ***********************-->
       <v-flex xs12 sm6 md4><v-text-field label="ФИО"/></v-flex>
       <v-flex xs12 sm6 md2>
         <v-select
@@ -34,7 +35,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <!-- **************доходы расходы ***********************-->
+      <!-- ************** доходы расходы ***********************-->
       <v-flex xs6 md2>
         <v-subheader class="pl-0">Доходы</v-subheader>
         <v-text-field v-model="income" type="number"/>
@@ -45,7 +46,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <!-- **************дисконты***********************-->      
+      <!-- ************** дисконты ***********************-->      
         <v-flex xs12 sm4 md2>
           <v-switch :label="`ЗП проект`" v-model="switch_disc"/>
         </v-flex>
@@ -57,7 +58,7 @@
         </v-flex>
     </v-layout>
     <v-layout row wrap>     
-        <!-- **************Срок сумма ставка***********************-->   
+        <!-- ************** Срок сумма ставка ***********************-->   
       <v-flex xs12 md3>
         <v-subheader class="pl-0">Срок</v-subheader>
         <v-slider
@@ -82,8 +83,7 @@
         />
      </v-flex>
     </v-layout>
-     
-      <!-- **************Итоги***********************-->
+      <!-- ************** Итоги ***********************-->
     <v-flex xs12>
         <h3>Платеж: {{pmt(std_rate).toLocaleString()}} Руб</h3>
         <h3>Проценты: {{ profit.toLocaleString()}} Руб</h3>
@@ -119,11 +119,11 @@ export default {
     return {
       items: dic.category,
       // значения по-уморчанию
-      category: 0, //категория клиента по умолчанию
+      category: 3, //категория клиента по умолчанию
       income:0,
       outcome:0,
       srok: 1,
-      summa: 50000,
+      summa: 500000,
       switch_insr: false,
       switch_disc: false,
       switch_obesp: false,
@@ -134,7 +134,7 @@ export default {
         rowsPerPage: 16
       },
       headers: [
-        { text: 'Сумма', value: 'summa', align: 'left'},
+        { text: 'Сумма', value: 'summa', align: 'center'},
         { text: 'Срок, мес', value: 'srok',align: 'center'},
         { text: 'Ставка', value: 'rate',align: 'center'},
         { text: 'Платеж, руб', value: 'pmt',align: 'center'},
@@ -144,8 +144,8 @@ export default {
       ],
       // продукты
       products:dic.products,
-      num_pr:'1',
-      product:''   
+      num_pr:'3',
+      product:'03.03.01'
     }
   },
     methods: {
@@ -162,7 +162,7 @@ export default {
         })  
       }
     },
-    // -------------Показы----------------
+    // -------------вычисляемые свойства----------------
     computed: {
       // продукты из выбранного направления
       get_products () {
@@ -193,7 +193,9 @@ export default {
         return this.pmt(this.std_rate)*this.srok-this.summa
       },  
     },
-    created() {}
+    created() {
+      
+    }
 }
 </script>
 

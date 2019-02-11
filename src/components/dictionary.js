@@ -6,8 +6,12 @@ export let category = [
 ]
 
 export let products = [
-  {product:"Ипотека", code: '1',
-    options:[{product:'Стандарт', code: '01.01.01'},{product:'Аппарты', code: '01.01.02'}]},
-  {product:"Потребительский", code: '3', 
-    options:[{product:'Стандарт', code: '03.03.01'},{product:'Аппарты', code: '03.03.02'}]}
+  {product:"Ипотека", code: '1', options:[
+     {product:'Стандарт', code: '01.01.01'}
+    ,{product:'Аппарты', code: '01.01.02'}
+  ]},
+  {product:"Потребительский", code: '3', options:[
+     {product:'Стандарт',code: '03.03.01'}
+    ,{product:'Рефинансирование', code: '03.03.02'}
+  ]}
 ]
