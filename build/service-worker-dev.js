@@ -4,7 +4,19 @@
 // file that will precache your site's local assets.
 // See https://github.com/facebookincubator/create-react-app/issues/2272#issuecomment-302832432
 
-self.addEventListener('install', () => self.skipWaiting());
+// self.addEventListener('install', () => self.skipWaiting());
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open($CACHE_STORE)
+      .then(cache => {
+        return cache.addAll($FILES);
+      })
+      .then(() => {
+        return self.skipWaiting();
+      })
+  );
+});
 
 self.addEventListener('activate', () => {
   self.clients.matchAll({ type: 'window' }).then(windowClients => {
