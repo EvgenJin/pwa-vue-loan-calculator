@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <header>
+    <!-- <header>
       <span>Vue.js PWA</span>
-    </header>
+    </header> -->
     <!-- <main>
       <img src="./assets/logo.png" alt="Vue.js PWA">
     </main> -->
@@ -10,10 +10,10 @@
     <!-- <v-navigation-drawer app></v-navigation-drawer> -->
     <v-toolbar app>Credit Calculator</v-toolbar>
     <v-content>
-      <v-container fluid>
+      <!-- <v-container fluid> -->
         <potreb></potreb>
         <!-- <router-view></router-view> -->
-      </v-container>
+      <!-- </v-container> -->
     </v-content>
     <v-footer app>EvgenJin</v-footer>
   </v-app>    
