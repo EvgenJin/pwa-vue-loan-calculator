@@ -1,29 +1,33 @@
 <template>
   <v-container fluid grid-list-md>
     <v-layout row wrap>
+      <v-flex xs12 lg6><v-text-field label="ФИО" outline/></v-flex>
+    </v-layout>  
+    <v-layout row wrap>
       <!-- ************** направление программа ***********************-->
-      <v-flex xs12 sm6 md4>
-        <v-select 
+      <v-flex xs12 sm6 md3>
+        <v-select
           v-model="num_pr" 
           :items="products" 
           item-text="product" 
           item-value="code"
           label="Направление"
+          outline
         />
       </v-flex>
-      <v-flex xs12 sm6 md4>
+      <v-flex xs12 sm6 md3>
         <v-select 
           v-model="product" 
           :items="get_products" 
           item-text="product" 
           item-value="code"
           label="Программа"
+          outline
         />
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <!-- ************** фио категория ***********************-->
-      <v-flex xs12 sm6 md4><v-text-field label="ФИО"/></v-flex>
+      <!-- ************** доходы расходы ***********************-->
       <v-flex xs12 sm6 md2>
         <v-select
           v-model="category"
@@ -31,35 +35,38 @@
           item-text="cat_name"
           item-value="cat_id"
           label="Категория клиента"
+          outline
         />
-      </v-flex>
-    </v-layout>
-    <v-layout row wrap>
-      <!-- ************** доходы расходы ***********************-->
+      </v-flex>      
       <v-flex xs6 md2>
-        <v-subheader class="pl-0">Доходы</v-subheader>
-        <v-text-field v-model="income" type="number"/>
+          <v-text-field label="Доходы" outline
+            v-model="income"
+          ></v-text-field>
       </v-flex>
       <v-flex xs6 md2>
-        <v-subheader class="pl-0">Обязательства</v-subheader>
-        <v-text-field v-model="outcome" type="number"/>
+          <v-text-field
+            label="Обязательства"
+            outline
+            v-model="outcome"
+          ></v-text-field>
+          <!-- placeholder="кредиты, алименты" -->
       </v-flex>
     </v-layout>
     <v-layout row wrap>
       <!-- ************** дисконты ***********************-->      
         <v-flex xs12 sm4 md2>
-          <v-switch :label="`ЗП проект`" v-model="switch_disc"/>
+          <v-switch label="ЗП проект" color="info" v-model="switch_disc"/>
         </v-flex>
         <v-flex xs12 sm4 md2>
-          <v-switch :label="`КДС`" v-model="switch_insr"/>
+          <v-switch label="КДС" color="red" v-model="switch_insr"/>
         </v-flex>
         <v-flex xs12 sm4 md2>
-          <v-switch :label="`Обеспечение`" v-model="switch_obesp"/>
+          <v-switch label="Обеспечение"   color="success" v-model="switch_obesp"/>
         </v-flex>
     </v-layout>
     <v-layout row wrap>     
         <!-- ************** Срок сумма ставка ***********************-->   
-      <v-flex xs12 md3>
+      <v-flex xs12 md4>
         <v-subheader class="pl-0">Срок</v-subheader>
         <v-slider
           v-model="srok"
@@ -68,26 +75,49 @@
         />
       </v-flex>
       <!--  -->
-      <v-flex xs6 md1>
+      <v-flex xs6 md2>
         <v-subheader class="pl-0">Сумма</v-subheader>
         <v-text-field
           v-model.number="summa"          
-          type="number"
+          outline
         />
       </v-flex>
-      <!--  -->
+    </v-layout>    
+    <v-layout row wrap>
       <v-flex xs6 md1>
-        <v-subheader class="pl-0">Ставка</v-subheader>
         <v-text-field
+          label="Годовая ставка"
           v-model="std_rate"
+          outline
+          readonly
+          color="secondary"
         />
+     </v-flex>
+      <v-flex xs6 md1>
+        <v-text-field
+          label="Ежемесячный платеж"
+          v-model="pmt(std_rate).toLocaleString()"
+          outline
+          readonly
+        />
+     </v-flex>
+      <v-flex xs6 md1>
+        <v-text-field
+          label="Проценты/переплата"
+          v-model="profit.toLocaleString()"
+          outline
+          readonly
+        />
+     </v-flex>
+     <v-flex xs6 md1>
+      <v-btn outline large color="info" @click = "add_var">Добавить</v-btn>
      </v-flex>
     </v-layout>
       <!-- ************** Итоги ***********************-->
     <v-flex xs12>
         <h3>Платеж: {{pmt(std_rate).toLocaleString()}} Руб</h3>
         <h3>Проценты: {{ profit.toLocaleString()}} Руб</h3>
-    <v-btn color="info" @click = "add_var">Добавить</v-btn>
+    
       </v-flex>
       <!-- таблица с вариантами -->
       <v-layout row wrap>
@@ -99,8 +129,10 @@
           <td class="text-xs-center">{{ props.item.rate }}</td>
           <td class="text-xs-center">{{ props.item.pmt.toLocaleString() }}</td>
           <td class="text-xs-center">{{ props.item.proc.toLocaleString() }}</td>
+          
           <td class="text-xs-center">{{ props.item.kds }}</td>
           <td class="text-xs-center">{{ props.item.obesp }}</td>
+          
         </template>
       </v-data-table>
       </v-flex>
@@ -139,6 +171,7 @@ export default {
         { text: 'Ставка', value: 'rate',align: 'center'},
         { text: 'Платеж, руб', value: 'pmt',align: 'center'},
         { text: 'Проценты', value: 'proc',align: 'center'},
+
         { text: 'КДС', value: 'kds',align: 'center'},
         { text: 'Обеспечение', value: 'obesp',align: 'center'}
       ],
@@ -153,12 +186,14 @@ export default {
       add_var () {
         this.vars.push({
              rate:this.std_rate
-            ,pmt:func.calc_pmt(this.std_rate,this.summa,this.srok)
+            ,pmt:this.pmt(this.std_rate).toLocaleString()
+            // func.calc_pmt(this.std_rate,this.summa,this.srok)
             ,kds: func.decode_boolean(this.switch_insr)
             ,obesp: func.decode_boolean(this.switch_obesp)
             ,proc:this.profit
             ,srok:this.srok
             ,summa:this.summa
+            // ,comission: get_sum_com()
         })  
       }
     },
@@ -186,12 +221,19 @@ export default {
       },
       // показ платежа
       pmt: function () {
-          return (rate) => func.calc_pmt(rate,this.summa,this.srok)
+          return (rate) => func.calc_pmt(rate,this.summa,this.srok) + this.get_sum_com
+          
       },
       // показ всех процентов
       profit: function () {
         return this.pmt(this.std_rate)*this.srok-this.summa
-      },  
+      },
+      get_sum_com () {
+        if (this.num_pr == '3' && (this.switch_insr) ) {
+            return this.summa*0.00192
+          }
+        else {return 0}  
+      }
     },
     created() {
       
