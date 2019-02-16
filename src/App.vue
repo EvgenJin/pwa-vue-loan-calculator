@@ -29,3 +29,22 @@ export default {
   }
 }
 </script>
+
+<style>
+@media print {
+    .v-toolbar, .v-footer {
+        display: none
+    }
+    body {
+      /* zoom:75%; */
+      width: 210mm;
+      height: 297mm;
+      margin: 0;
+	    /* margin-top: 2cm; */
+	    /* margin-right: 2cm; */
+	    /* margin-bottom: 1.5cm; */
+	    /* margin-left: 2cm; */
+      box-shadow: 0;
+    }
+}
+</style>
